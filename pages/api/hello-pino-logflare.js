@@ -1,23 +1,25 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import logger from "../../logger/logger";
-
+import logger from '../../logger/logger';
 
 export default function handler(req, res) {
-  res.status(200)
+  res.status(200);
 
   const data = {
     request: {
       method: req.method,
-      url: req.url
+      url: req.url,
     },
     response: {
-      status: res.statusCode
-    }
-  }
+      status: res.statusCode,
+    },
+  };
 
-  // Logging to pino-logflare
+  // Logging to SigNoz via OTLP
+  logger.info('Handled response. Logged with SigNoz.', {
+    ...data,
+    source: 'server',
+  });
+  console.log('Handled response. Logged with SigNoz.', { source: 'server' });
 
-  logger.info(data, "Handled response. Logged with pino-logflare.")
-
-  res.json({ name: 'John Doe' })
+  res.json({ name: 'John Doe' });
 }

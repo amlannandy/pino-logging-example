@@ -1,14 +1,17 @@
-import logger from '../../logger/logger'
+import logger from '../../logger/logger';
 
 export default function handler(req, res) {
+  // Lets log an error with SigNoz here.
 
-    // Lets log an error with pino-logflare here.
+  try {
+    throw new Error('Whoops! Error with SigNoz.');
+  } catch (e) {
+    logger.error('API error sent to SigNoz', {
+      error: e.message,
+      stack: e.stack,
+      source: 'api/error-pino-logflare',
+    });
+  }
 
-    try {
-        throw new Error('Whoops! Error with pino-logflare.')
-    } catch (e) {
-        logger.error(e)
-    }
-
-    res.status(500).json({ error: 'true' })
+  res.status(500).json({ error: 'true' });
 }
